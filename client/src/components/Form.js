@@ -24,7 +24,7 @@ class Form extends React.Component {
     }
     event.preventDefault();
     if (this.props.post) {
-      console.log('editing ', post); 
+      console.log('editing ', post);
       this.props.submit(post);
       this.setState({
         title: '',
@@ -39,7 +39,6 @@ class Form extends React.Component {
         contents: '',
       });
       this.props.history.push('/');
-      window.location.reload();
     }
   }
 

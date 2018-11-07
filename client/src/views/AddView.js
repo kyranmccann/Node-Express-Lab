@@ -1,5 +1,8 @@
 import React from 'react';
 import axios from 'axios';
+
+import { connect } from 'react-redux'
+import { addPost } from '../actions';
 import { Form } from '../components';
 
 
@@ -7,12 +10,13 @@ class AddView extends React.Component{
 
   addPost = post => {
     console.log('addform props', this.props);
-    axios
-      .post('http://localhost:9000/api/posts', post)
-      .then(response => {
-        this.props.saveHelper(response.data)
-      })
-      .catch(error => console.log(error));
+    this.props.addPost(post)
+    // axios
+    //   .post('http://localhost:9000/api/posts', post)
+    //   .then(response => {
+    //     this.props.saveHelper(response.data)
+    //   })
+    //   .catch(error => console.log(error));
 
   }
   render(){
@@ -24,4 +28,9 @@ class AddView extends React.Component{
     )
   }
 }
-export default AddView;
+export default connect(
+  null,
+  {
+    addPost
+  }
+)(AddView);

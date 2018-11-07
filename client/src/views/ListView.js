@@ -1,35 +1,18 @@
 import React from 'react';
-import axios from 'axios';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { PostList } from '../components';
 
+import { fetchPosts } from '../actions';
+
 class ListView extends React.Component {
-  constructor(){
-    super();
-    this.state = {
-      posts: []
-    }
-  }
-
+  
   componentDidMount() {
-    axios
-      .get('http://localhost:9000/api/posts')
-      .then(response => {
-        this.setState({
-          posts: response.data
-        })
-      })
-      .catch(error => console.log(error));
-
-      if (this.props.newPost) {
-        this.setState({
-          posts: [...this.state.posts, ...this.props.newPost,]
-        })
-      }
+    this.props.fetchPosts();
   }
 
   render() {
-    if (this.state.posts.length === 0){
+    if (this.props.fetchingPosts) {
       return (
         <div className='loading'>
           <h2>Loading posts...</h2>
@@ -41,10 +24,22 @@ class ListView extends React.Component {
       <Link to='/add' className='button add-button'>
         Add a quote
       </Link>
-      <PostList posts={this.state.posts} />
+      <PostList posts={this.props.posts} />
     </div>
     );
   }
 }
 
-export default ListView;
+const mapStateToProps = state => {
+  return {
+    posts: state.postsReducer.posts,
+    fetchingPosts: state.postsReducer.fetchingPosts,
+    error: state.postsReducer.error,
+  }
+}
+export default connect(
+  mapStateToProps,
+  {
+    fetchPosts,
+  }
+)(ListView);
